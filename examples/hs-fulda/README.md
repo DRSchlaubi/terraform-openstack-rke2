@@ -23,7 +23,7 @@ The final step requires `rsync` and `yq`, which are not available by default on 
 | **SSH**                  | Manually log in and fetch `rke2.yaml` by assigning a temporary floating IP   | `ssh ubuntu@<floating-ip>`                                                                                                                            |
 | **SCP**                  | Use `scp` to copy the `kubeconfig` file by assigning a temporary floating IP | `scp ubuntu@<floating-ip>:/etc/rancher/rke2/CloudComp<your-group-number>-k8s.rke2.yaml`                                                               |
 | **WSL/WSL2**             | Use Windows Subsystem for Linux (WSL/WSL2) to run Terraform                  | Install `yq` from [here](https://github.com/mikefarah/yq/releases).                                                                                   |
-| **Install rsync and yq** | Install `rsync` and `yq` on Windows                                          | Install `rsync` from [here](https://www.rsync.net/resources/howto/windows_rsync.html) and `yq` from [here](https://github.com/mikefarah/yq/releases). |
+| **Install rsync and yq** | Install `rsync` and `yq` on Windows                                          | Install `rsync` from [here](https://itefix.net/cwrsync/) and `yq` from [here](https://github.com/mikefarah/yq/releases). |
 
 ### Step 1: Clone the Repository
 
