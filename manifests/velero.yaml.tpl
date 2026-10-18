@@ -6,16 +6,16 @@ metadata:
 spec:
   chart: velero
   repo: https://vmware-tanzu.github.io/helm-charts
-  version: 11.3.2
+  version: 12.2.1
   targetNamespace: velero
   valuesContent: |-
     image:
       repository: docker.io/velero/velero
-      tag: v1.17.1
+      tag: v1.18.4
       pullPolicy: IfNotPresent
     initContainers:
       - name: velero-plugin-for-openstack
-        image: docker.io/lirt/velero-plugin-for-openstack:v0.8.0
+        image: docker.io/lirt/velero-plugin-for-openstack:v0.8.2
         imagePullPolicy: IfNotPresent
         volumeMounts:
           - mountPath: /target
@@ -58,6 +58,10 @@ spec:
           value: "${app_secret}"
         - name: OS_CLOUD
           value: self
+        - name: TLS_SKIP_VERIFY
+          value: ${yamlencode(tostring(insecure))}
+        - name: OS_VERIFY
+          value: ${yamlencode(tostring(!insecure))}
     credentials:
       # for community.openstack.org/openstack
       secretContents:

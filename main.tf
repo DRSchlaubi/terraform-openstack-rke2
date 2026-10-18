@@ -122,6 +122,7 @@ module "servers" {
         bucket_restic          = openstack_objectstorage_container_v1.restic.name
         bucket_velero          = openstack_objectstorage_container_v1.velero.name
         node_agent_tolerations = local.agent_daemonset_tolerations
+        insecure = var.insecure
       }),
       "cloud-controller-openstack.yaml" : templatefile("${path.module}/manifests/cloud-controller-openstack.yaml.tpl", {
         auth_url            = var.identity_endpoint

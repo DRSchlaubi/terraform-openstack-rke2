@@ -53,6 +53,7 @@ locals {
         bucket_restic          = "fixture-restic"
         bucket_velero          = "fixture-velero"
         node_agent_tolerations = var.daemonset_tolerations
+        insecure = false
       }))
       "cloud-controller-openstack.yaml" = templatefile("${path.module}/../../manifests/cloud-controller-openstack.yaml.tpl", merge(local.credentials, {
         network_id          = "fixture-network"
