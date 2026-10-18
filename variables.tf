@@ -79,6 +79,11 @@ variable "subnet_servers_vip" {
   default = null
 }
 
+variable "vip_interface" {
+  type    = string
+  default = "ens3"
+}
+
 variable "subnet_agents_cidr" {
   type    = string
   default = "192.168.43.0/24"

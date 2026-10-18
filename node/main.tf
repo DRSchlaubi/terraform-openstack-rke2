@@ -86,6 +86,7 @@ resource "openstack_compute_instance_v2" "instance" {
     is_first     = var.is_first && count.index == 0
     bootstrap    = var.bootstrap && var.is_first && count.index == 0
     internal_vip = var.internal_vip
+    vip_interface = var.vip_interface
     node_ip      = openstack_networking_port_v2.port[count.index].all_fixed_ips[0]
     cluster_cidr = var.cluster_cidr
     service_cidr = var.service_cidr

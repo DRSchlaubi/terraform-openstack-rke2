@@ -85,6 +85,11 @@ variable "internal_vip" {
   default = ""
 }
 
+variable "vip_interface" {
+  type    = string
+}
+
+
 variable "bastion_host" {
   type = string
 }

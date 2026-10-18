@@ -1,5 +1,5 @@
 ###########################################################
-# 
+#
 # Author: Lucas Immanuel Nickel, Sebastian Rieger
 # Date: November 16, 2024
 # Remark: This code is not production ready as it disables certificate checks by default
@@ -42,7 +42,8 @@ locals {
 module "rke2" {
   # source = "zifeo/rke2/openstack"
   # version = ""
-  source = "git::https://github.com/srieger1/terraform-openstack-rke2.git?ref=hsfulda-example"
+  # source = "git::https://github.com/srieger1/terraform-openstack-rke2.git?ref=hsfulda-example"
+  source = "../../"
 
   insecure            = local.insecure
   #cacert_file          = base64encode(file(local.cacert_file))
@@ -179,7 +180,6 @@ terraform {
   required_providers {
     openstack = {
       source  = "terraform-provider-openstack/openstack"
-      version = ">= 2.0.0"
     }
   }
 }

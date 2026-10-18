@@ -2,10 +2,6 @@
 $user = "CloudServ17"
 $floatingIP = "10.32.6.6"
 
-winget install -e --id MikeFarah.yq
-winget install -e --id Kubernetes.kubectl
-winget install -e --id Helm.Helm
-
 $server = "ubuntu@${floatingIP}"
 $remoteFilePath = "/etc/rancher/rke2/rke2.yaml"
 $localFilePath = ".\${user}.rke2.yaml"

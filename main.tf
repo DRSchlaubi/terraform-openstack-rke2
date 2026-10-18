@@ -95,6 +95,7 @@ module "servers" {
   cni          = var.cni
   secgroup_id  = openstack_networking_secgroup_v2.server.id
   internal_vip = local.internal_vip
+  vip_interface = var.vip_interface
   bastion_host = local.external_ip
   san          = distinct(concat([local.external_ip, local.internal_vip], var.additional_san))
 

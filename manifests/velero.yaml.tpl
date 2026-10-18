@@ -31,8 +31,8 @@ spec:
         memory: 256Mi
     kubectl:
       image:
-        repository: docker.io/bitnamilegacy/kubectl
-        tag: "1.29-debian-11"
+        repository: docker.io/alpine/kubectl
+        tag: "1.37.1"
     configuration:
       namespace: velero
       features: EnableCSI
