@@ -20,6 +20,7 @@ spec:
         volumeMounts:
           - mountPath: /target
             name: plugins
+
     tolerations:
       - key: node-role.kubernetes.io/control-plane
         effect: NoSchedule
@@ -58,6 +59,13 @@ spec:
           value: "${app_secret}"
         - name: OS_CLOUD
           value: self
+        - name: OS_INSECURE
+          value: "${yamlencode(insecure)}"
+        %{~ if use_custom_ca_cert != null ~}
+        - name: OS_CACERT
+          value: /etc/ssl/certs/custom-ca-bundle.pem
+        %{~ endif ~}
+
     credentials:
       # for community.openstack.org/openstack
       secretContents:
@@ -77,11 +85,26 @@ spec:
           items:
           - key: clouds.yaml
             path: clouds.yaml
+    %{~ if use_custom_ca_cert != null ~}
+      - name: custom-ca-bundle
+        secret:
+          secretName: openstack-ca
+          items:
+            - key: ca.crt
+              path: custom-ca-bundle.pem
+    %{~ endif ~}
+
     extraVolumeMounts:
       - name: cloud-config-velero
         mountPath: /etc/openstack/clouds.yaml
         readOnly: true
         subPath: clouds.yaml
+    %{~ if use_custom_ca_cert != null ~}
+      - name: custom-ca-bundle
+        mountPath: /etc/ssl/certs/custom-ca-bundle.pem
+        subPath: custom-ca-bundle.pem
+        readOnly: true
+    %{~ endif ~}
     backupsEnabled: true
     snapshotsEnabled: true
     deployNodeAgent: true

@@ -7,3 +7,8 @@ resources:
     memory: "128Mi"
 autoscaler:
   min: ${operator_replica}
+# CCM itself needs DNS
+tolerations:
+      - key: "node.cloudprovider.kubernetes.io/uninitialized"
+        operator: "Exists"
+        effect: "NoSchedule"

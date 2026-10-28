@@ -7,7 +7,7 @@ spec:
   chart: openstack-cloud-controller-manager
   repo: https://kubernetes.github.io/cloud-provider-openstack
   # https://artifacthub.io/packages/helm/cloud-provider-openstack/openstack-cloud-controller-manager
-  version: 2.36.0
+  version: 2.37.1
   targetNamespace: kube-system
   bootstrap: true
   valuesContent: |-
@@ -29,6 +29,9 @@ spec:
         region: ${region}
         tenant-id: ${project_id}
         tls-insecure: ${insecure}
+        %{~ if use_custom_ca_cert != null ~}
+        ca-file: /etc/ssl/certs/custom-ca-bundle.pem
+        %{~ endif ~}
       loadBalancer:
         %{~ if floating_network_id != null ~}
         floating-network-id: ${floating_network_id}
@@ -43,3 +46,18 @@ spec:
       - --use-service-account-credentials=false
     cluster:
       name: ${cluster_name}
+
+    %{~ if use_custom_ca_cert != null ~}
+    extraVolumes:
+      - name: custom-ca-bundle
+        secret:
+          secretName: openstack-ca
+          items:
+            - key: ca.crt
+              path: custom-ca-bundle.pem
+    extraVolumeMounts:
+      - name: custom-ca-bundle
+        mountPath: /etc/ssl/certs/custom-ca-bundle.pem
+        subPath: custom-ca-bundle.pem
+        readOnly: true
+    %{~ endif ~}

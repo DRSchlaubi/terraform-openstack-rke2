@@ -8,35 +8,35 @@
 ###########################################################
 
 locals {
-    ###########################################################
-    #
-    # Config parameters
-    #
-    # also add terraform.tfvars, see README at:
-    #
-    # https://github.com/srieger1/terraform-openstack-rke2/tree/hsfulda-example-2023-10/examples/hs-fulda
-    #
-    ###########################################################
+  ###########################################################
+  #
+  # Config parameters
+  #
+  # also add terraform.tfvars, see README at:
+  #
+  # https://github.com/srieger1/terraform-openstack-rke2/tree/hsfulda-example-2023-10/examples/hs-fulda
+  #
+  ###########################################################
 
-    insecure         = true
-    auth_url         = "https://private-cloud.informatik.hs-fulda.de:5000"
-    object_store_url = "https://10.32.4.32:443"
-    region           = "RegionOne"
-    cacert_file      = "./os-trusted-cas"
+  insecure         = false
+  auth_url         = "https://private-cloud.informatik.hs-fulda.de:5000"
+  object_store_url = "https://10.32.4.32:443"
+  region           = "RegionOne"
+  cacert_file      = "./os-trusted-cas"
 
-    cluster_name     = lower("${var.project}-k8s")
-    image_name       = "ubuntu-24.04-noble-server-cloud-image-amd64"
-    flavor_name      = "m1.medium"
-    system_user      = "ubuntu"
-    floating_ip_pool = "ext_net"
-    #ssh_pubkey_file  = "~/.ssh/id_rsa.pub"
-    ssh_pubkey_file  = "~/.ssh/id_ed25519.pub"
-    dns_server       = "10.33.16.100"
-    #rke2_version     = "v1.30.3+rke2r1" old
-    #rke2_version     = "v1.34.7+rke2r1" works
-    rke2_version     = "v1.35.4+rke2r1"
+  cluster_name     = lower("${var.project}-k8s")
+  image_name       = "ubuntu-24.04-noble-server-cloud-image-amd64"
+  flavor_name      = "m1.medium"
+  system_user      = "ubuntu"
+  floating_ip_pool = "ext_net"
+  #ssh_pubkey_file  = "~/.ssh/id_rsa.pub"
+  ssh_pubkey_file = "~/.ssh/id_ed25519.pub"
+  dns_server      = "10.33.16.100"
+  #rke2_version     = "v1.30.3+rke2r1" old
+  #rke2_version     = "v1.34.7+rke2r1" works
+  rke2_version = "v1.35.4+rke2r1"
 
-    ###########################################################
+  ###########################################################
 }
 
 module "rke2" {
@@ -45,8 +45,8 @@ module "rke2" {
   # source = "git::https://github.com/srieger1/terraform-openstack-rke2.git?ref=hsfulda-example"
   source = "../../"
 
-  insecure            = local.insecure
-  #cacert_file          = base64encode(file(local.cacert_file))
+  insecure    = local.insecure
+  cacert_file = local.cacert_file
 
   # must be true for single server cluster or
   # only on the first run for high-availability cluster
@@ -55,17 +55,17 @@ module "rke2" {
   ssh_authorized_keys = [local.ssh_pubkey_file]
   floating_pool       = local.floating_ip_pool
   # should be restricted to secure bastion
-  rules_ssh_cidr      = [ "0.0.0.0/0" ]
-  rules_k8s_cidr      = [ "0.0.0.0/0" ]
+  rules_ssh_cidr = ["0.0.0.0/0"]
+  rules_k8s_cidr = ["0.0.0.0/0"]
 
   servers = [{
-    name = "controller"
-    flavor_name = local.flavor_name
-    image_name  = local.image_name
-    system_user = local.system_user
-    boot_volume_size = 6
-    rke2_version     = local.rke2_version
-    rke2_volume_size = 8
+    name               = "controller"
+    flavor_name        = local.flavor_name
+    image_name         = local.image_name
+    system_user        = local.system_user
+    boot_volume_size   = 6
+    rke2_version       = local.rke2_version
+    rke2_volume_size   = 8
     rke2_volume_device = "/dev/vdb"
     # https://docs.rke2.io/install/install_options/server_config/
     rke2_config = <<EOF
@@ -83,10 +83,10 @@ EOF
       image_name  = local.image_name
       # if you want a fixed version
       # image_uuid = "..."
-      system_user = local.system_user
-      boot_volume_size = 6
-      rke2_version     = local.rke2_version
-      rke2_volume_size = 8
+      system_user        = local.system_user
+      boot_volume_size   = 6
+      rke2_version       = local.rke2_version
+      rke2_volume_size   = 8
       rke2_volume_device = "/dev/vdb"
     }
   ]
@@ -122,22 +122,22 @@ EOF
     }
   }
   #vip_interface       = "ens2"
-  dns_nameservers4    = [local.dns_server]
+  dns_nameservers4 = [local.dns_server]
   # enable automatically agent removal of the cluster (wait max for 30s)
   ff_autoremove_agent = "30s"
   # rewrite kubeconfig
   ff_write_kubeconfig = true
   # deploy etcd backup
-  ff_native_backup    = true
+  ff_native_backup = true
   # wait for the cluster to be ready when deploying
-  ff_wait_ready       = true
+  ff_wait_ready = true
 
   identity_endpoint     = local.auth_url
   object_store_endpoint = local.object_store_url
 
   registries = {
     mirrors = {
-      "*": {
+      "*" : {
         endpoint = [
           "https://harbor.cs.hs-fulda.de"
         ]
@@ -179,7 +179,7 @@ terraform {
 
   required_providers {
     openstack = {
-      source  = "terraform-provider-openstack/openstack"
+      source = "terraform-provider-openstack/openstack"
     }
   }
 }

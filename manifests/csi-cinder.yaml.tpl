@@ -73,6 +73,25 @@ spec:
             memory: 128Mi
           limits:
             memory: 256Mi
+        %{~ if use_custom_ca_cert != null ~}
+        volumes:
+          - name: custom-ca-bundle
+            secret:
+              secretName: openstack-ca
+              items:
+                - key: ca.crt
+                  path: custom-ca-bundle.pem
+         %{~ endif ~}
+        volumeMounts:
+          %{~ if use_custom_ca_cert != null ~}
+          - name: custom-ca-bundle
+            mountPath: /etc/ssl/certs/custom-ca-bundle.pem
+            subPath: custom-ca-bundle.pem
+            readOnly: true
+          %{~ endif ~}
+          - name: cloud-config
+            mountPath: /etc/config
+            readOnly: true
     secret:
       enabled: true
       create: true
@@ -87,6 +106,9 @@ spec:
           region = ${region}
           tenant-id = ${project_id}
           tls-insecure = ${insecure}
+          %{~ if use_custom_ca_cert != null ~}
+          ca-file = /etc/ssl/certs/custom-ca-bundle.pem
+          %{~ endif ~}
           [BlockStorage]
           ignore-volume-az = true
           rescan-on-resize = true

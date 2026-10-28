@@ -426,3 +426,13 @@ variable "registries" {
 
   default = null
 }
+
+variable "cacert_file" {
+  type = string
+  default = null
+
+  validation {
+    condition = var.cacert_file == null || fileexists(var.cacert_file)
+    error_message = "CA Cert file has to exist"
+  }
+}
