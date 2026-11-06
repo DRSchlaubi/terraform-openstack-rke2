@@ -14,7 +14,7 @@ This guide outlines the steps to set up an RKE2 Kubernetes cluster on OpenStack 
 ### Step 1: Clone the Repository
 
 ```sh
-git clone https://github.com/srieger1/tofu-openstack-rke2.git
+git clone https://github.com/srieger1/terraform-openstack-rke2.git
 ```
 
 ### Step 2: Configure OpenTofu Variables
