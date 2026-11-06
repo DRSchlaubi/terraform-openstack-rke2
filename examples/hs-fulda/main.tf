@@ -1,5 +1,5 @@
 ###########################################################
-# 
+#
 # Author: Lucas Immanuel Nickel, Sebastian Rieger
 # Date: November 16, 2024
 # Remark: This code is not production ready as it disables certificate checks by default
@@ -18,11 +18,10 @@ locals {
     #
     ###########################################################
 
-    insecure         = true
+    insecure         = false
     auth_url         = "https://private-cloud.informatik.hs-fulda.de:5000"
     object_store_url = "https://10.32.4.32:443"
     region           = "RegionOne"
-    cacert_file      = "./os-trusted-cas"
 
     cluster_name     = lower("${var.project}-k8s")
     image_name       = "ubuntu-24.04-noble-server-cloud-image-amd64"
@@ -170,7 +169,6 @@ provider "openstack" {
   password    = var.password
   auth_url    = local.auth_url
   region      = local.region
-  cacert_file = local.cacert_file
 }
 
 terraform {
