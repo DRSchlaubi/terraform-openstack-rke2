@@ -105,7 +105,7 @@ while ($true) {
 Within about four minutes, all pods should be running in the kube-system namespace. You can then deploy workloads, such as WordPress, using `helm`:
 
 ```sh
-helm install my-release oci://registry-1.docker.io/bitnamicharts/wordpress
+helm install my-release oci://ghcr.io/helmforgedev/helm/wordpress:3.3.0 --values wordpress.values.yaml
 ```
 
 To check the deployment status:
