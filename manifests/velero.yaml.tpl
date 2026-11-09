@@ -49,7 +49,7 @@ spec:
           provider: csi
       extraEnvVars:
         - name: OS_AUTH_URL
-          value: "${auth_url}/v3"
+          value: "${auth_url}"
         - name: OS_APPLICATION_CREDENTIAL_ID
           value: "${app_id}"
         - name: OS_APPLICATION_CREDENTIAL_NAME
@@ -58,6 +58,7 @@ spec:
           value: "${app_secret}"
         - name: OS_CLOUD
           value: self
+          
     credentials:
       # for community.openstack.org/openstack
       secretContents:
@@ -66,7 +67,7 @@ spec:
             self:
               region_name: ${region}
               auth:
-                auth_url: ${auth_url}/v3
+                auth_url: ${auth_url}
                 application_credential_id: ${app_id}
                 application_credential_name: ${app_name}
                 application_credential_secret: ${app_secret}
