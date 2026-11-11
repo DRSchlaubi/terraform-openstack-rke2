@@ -35,7 +35,7 @@ defaults for running production workload.
 | RKE2                       | [v1.36.2+rke2r1](https://github.com/rancher/rke2/releases/tag/v1.36.2+rke2r1)                                            |
 | OpenStack Cloud Controller | [v2.36.0](https://github.com/kubernetes/cloud-provider-openstack/releases/tag/openstack-cloud-controller-manager-2.36.0) |
 | OpenStack Cinder           | [v2.36.0](https://github.com/kubernetes/cloud-provider-openstack/releases/tag/openstack-cinder-csi-2.36.0)               |
-| Velero                     | [v11.3.2](https://github.com/vmware-tanzu/helm-charts/releases/tag/velero-11.3.2)                                        |
+| Velero                     | [v12.2.4](https://github.com/vmware-tanzu/helm-charts/releases/tag/velero-12.2.4)                                        |
 | Kube-vip                   | [v1.2.4](https://github.com/kube-vip/kube-vip/releases/tag/v1.2.4)                                                       |
 
 ## Getting started
