@@ -6,7 +6,7 @@ metadata:
 spec:
   chart: velero
   repo: https://vmware-tanzu.github.io/helm-charts
-  version: 12.2.1
+  version: 12.2.4
   targetNamespace: velero
   valuesContent: |-
     image:
@@ -32,7 +32,7 @@ spec:
     kubectl:
       image:
         repository: docker.io/alpine/kubectl
-        tag: "1.37.1"
+        tag: "1.37.2"
     configuration:
       namespace: velero
       features: EnableCSI
@@ -49,7 +49,7 @@ spec:
           provider: csi
       extraEnvVars:
         - name: OS_AUTH_URL
-          value: "${auth_url}/v3"
+          value: "${auth_url}"
         - name: OS_APPLICATION_CREDENTIAL_ID
           value: "${app_id}"
         - name: OS_APPLICATION_CREDENTIAL_NAME
@@ -58,10 +58,7 @@ spec:
           value: "${app_secret}"
         - name: OS_CLOUD
           value: self
-        - name: TLS_SKIP_VERIFY
-          value: ${yamlencode(tostring(insecure))}
-        - name: OS_VERIFY
-          value: ${yamlencode(tostring(!insecure))}
+
     credentials:
       # for community.openstack.org/openstack
       secretContents:
@@ -70,7 +67,7 @@ spec:
             self:
               region_name: ${region}
               auth:
-                auth_url: ${auth_url}/v3
+                auth_url: ${auth_url}
                 application_credential_id: ${app_id}
                 application_credential_name: ${app_name}
                 application_credential_secret: ${app_secret}
@@ -93,8 +90,6 @@ spec:
       podVolumePath: /var/lib/kubelet/pods
       containerSecurityContext:
         privileged: false
-      tolerations:
-        ${indent(8, yamlencode(node_agent_tolerations))}
       resources:
         requests:
           cpu: 100m

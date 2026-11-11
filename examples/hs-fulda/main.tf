@@ -18,11 +18,13 @@ locals {
     #
     ###########################################################
 
-    insecure         = true
-    auth_url         = "https://private-cloud.informatik.hs-fulda.de:5000"
-    object_store_url = "https://10.32.4.32:443"
+    insecure         = false
+    # /v3/ is required for now to prevent gophercloud (which openstack terraform provider is based
+    # on, to request the version from keystone, ending up in using our VIP instead of
+    # private-cloud.informatik.hs-fulda.de and the valid cert, from keystone public endpoint
+    auth_url         = "https://private-cloud.informatik.hs-fulda.de:5000/v3/"
+    object_store_url = "https://s3.private-cloud.informatik.hs-fulda.de"
     region           = "RegionOne"
-    cacert_file      = "./os-trusted-cas"
 
     cluster_name     = lower("${var.project}-k8s")
     image_name       = "ubuntu-24.04-noble-server-cloud-image-amd64"
@@ -40,10 +42,15 @@ locals {
 }
 
 module "rke2" {
+  # use module source from zifeo in terraform registry:
   # source = "zifeo/rke2/openstack"
   # version = ""
-  # source = "git::https://github.com/srieger1/terraform-openstack-rke2.git?ref=hsfulda-example"
-  source = "../../"
+
+  # use module source from our fork's hsfulda-example branch
+  #source = "git::https://github.com/srieger1/terraform-openstack-rke2.git?ref=hsfulda-example"
+
+  # use module source locally from this repo (../.. dir from this example)
+  source = "../.."
 
   insecure            = local.insecure
   #cacert_file          = base64encode(file(local.cacert_file))
@@ -171,7 +178,12 @@ provider "openstack" {
   password    = var.password
   auth_url    = local.auth_url
   region      = local.region
-  cacert_file = local.cacert_file
+
+  # required as long as out keystone public endpoint still used a VIP as this
+  # bypasses nginx reverse proxy and uses vault ca internal cert
+  endpoint_overrides = {
+    "identity" = local.auth_url
+  }
 }
 
 terraform {
@@ -180,6 +192,7 @@ terraform {
   required_providers {
     openstack = {
       source  = "terraform-provider-openstack/openstack"
+      version = ">= 2.0.0"
     }
   }
 }
