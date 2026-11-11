@@ -48,6 +48,7 @@ locals {
       "cinder-csi.yaml" = templatefile("${path.module}/../../manifests/csi-cinder.yaml.tpl", merge(local.credentials, {
         operator_replica        = 3
         node_plugin_tolerations = var.daemonset_tolerations
+        insecure = false
       }))
       "velero.yaml" = templatefile("${path.module}/../../manifests/velero.yaml.tpl", merge(local.credentials, {
         bucket_restic          = "fixture-restic"
@@ -61,6 +62,7 @@ locals {
         floating_network_id = "fixture-floating"
         lb_provider         = "amphora"
         cluster_name        = "fixture"
+        insecure = false
       }))
       "patches/rke2-cilium.yaml" = templatefile("${path.module}/../../patches/rke2-cilium.yaml.tpl", {
         operator_replica       = 3
