@@ -32,6 +32,7 @@ def _documents(manifests):
 
 
 def _dig(node, path):
+    print(f"Digging for path: {path}")
     for key in path:
         node = node[key]
     return node
